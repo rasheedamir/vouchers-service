@@ -30,12 +30,17 @@ public class VoucherService {
 
     public ApiVoucher save(@Valid ApiVoucher voucher) {
 
+        // TODO: The data from the ApiVoucher will be passed onto the process
+        // TODO: Q: To understand if it makes sense to pass whole object as JSON or pass piece by piece?
+        // TODO: Q: The data from the API call will be used as payload of the start event?
         // Just testing activiti
         ProcessInstance processInstance = processRuntime.start(ProcessPayloadBuilder
                 .start()
                 .withProcessDefinitionKey("VoucherProcess")
                 .withVariable("voucher", voucher)
                 .build());
+
+        // TODO: Q: To understand that does it make sense to pass all data to activiti process and then separately persist as entity as well? Isn't it duplication?
 
         // Just return some hard coded value for now
         return ApiVoucher.newBuilder().id(1L).description("First voucher").build();
