@@ -174,7 +174,7 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
     // TODO: just added for testing purposes and should be removed later
     // from Salaboy: then add the UserDetailsManager implementation for keycloak
     @Bean
-    public UserDetailsService myUserDetailsService() {
+    public UserDetailsService userDetailsService() {
 
         InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
 

@@ -1,5 +1,6 @@
 package com.tinyerp.gateway.rest;
 
+import com.tinyerp.gateway.config.security.ActivitiSecurityUtil;
 import com.tinyerp.gateway.json.ApiVoucher;
 import com.tinyerp.gateway.service.VoucherService;
 import com.tinyerp.gateway.util.HeaderUtil;
@@ -34,15 +35,19 @@ public class VoucherResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(VoucherResource.class);
 
     private final VoucherService voucherService;
+    private final ActivitiSecurityUtil activitiSecurityUtil;
 
     @Autowired
-    public VoucherResource(VoucherService voucherService) {
+    public VoucherResource(VoucherService voucherService, ActivitiSecurityUtil activitiSecurityUtil) {
         this.voucherService = voucherService;
+        this.activitiSecurityUtil = activitiSecurityUtil;
     }
 
     @PostMapping(VOUCHER)
     @Timed
     public ResponseEntity<ApiVoucher> createVoucher(@Valid @RequestBody ApiVoucher voucher, OAuth2Authentication oAuth2Authentication) throws URISyntaxException {
+        // TODO: this must be handled somewhere else more globally! as this creates the link
+        activitiSecurityUtil.logInAs("system");
         LOGGER.debug("REST request to save Voucher : {}", voucher);
         LOGGER.debug("REST request to save Voucher sent By: {}", oAuth2Authentication);
         ApiVoucher result = voucherService.save(voucher);
