@@ -13,6 +13,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -26,13 +29,18 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
 @EnableResourceServer
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
     @Value("${keycloak.jwtPublicKey}")
@@ -161,5 +169,32 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
     @Bean
     public WebResponseExceptionTranslator<?> exceptionTranslator() {
         return new ApiErrorWebResponseExceptionTranslator();
+    }
+
+    // TODO: just added for testing purposes and should be removed later
+    // from Salaboy: then add the UserDetailsManager implementation for keycloak
+    @Bean
+    public UserDetailsService myUserDetailsService() {
+
+        InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
+
+        String[][] usersGroupsAndRoles = {
+                {"salaboy", "password", "ROLE_ACTIVITI_USER", "GROUP_activitiTeam"},
+                {"ryandawsonuk", "password", "ROLE_ACTIVITI_USER", "GROUP_activitiTeam"},
+                {"erdemedeiros", "password", "ROLE_ACTIVITI_USER", "GROUP_activitiTeam"},
+                {"other", "password", "ROLE_ACTIVITI_USER", "GROUP_otherTeam"},
+                {"system", "password", "ROLE_ACTIVITI_USER"},
+                {"admin", "password", "ROLE_ACTIVITI_ADMIN"},
+        };
+
+        for (String[] user : usersGroupsAndRoles) {
+            List<String> authoritiesStrings = Arrays.asList(Arrays.copyOfRange(user, 2, user.length));
+            LOGGER.info("> Registering new user: " + user[0] + " with the following Authorities[" + authoritiesStrings + "]");
+            inMemoryUserDetailsManager.createUser(new User(user[0], passwordEncoder().encode(user[1]),
+                    authoritiesStrings.stream().map(s -> new SimpleGrantedAuthority(s)).collect(Collectors.toList())));
+        }
+
+
+        return inMemoryUserDetailsManager;
     }
 }
