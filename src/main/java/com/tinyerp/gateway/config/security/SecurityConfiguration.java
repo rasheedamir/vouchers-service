@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 @Configuration
 @EnableWebSecurity
 @EnableResourceServer
+// Commented out becoz it comes with activiti; and should be fixed with: https://github.com/Activiti/Activiti/issues/2387
 //@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
@@ -77,7 +78,6 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/api/**").permitAll()
             .antMatchers("/swagger-ui.html").denyAll();
 
     }

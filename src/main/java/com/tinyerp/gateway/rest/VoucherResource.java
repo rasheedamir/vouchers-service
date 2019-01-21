@@ -43,6 +43,7 @@ public class VoucherResource {
         this.activitiSecurityUtil = activitiSecurityUtil;
     }
 
+    // TODO: OAuth2Authentication is null whereas it shouldn't be!
     @PostMapping(VOUCHER)
     @Timed
     public ResponseEntity<ApiVoucher> createVoucher(@Valid @RequestBody ApiVoucher voucher, OAuth2Authentication oAuth2Authentication) throws URISyntaxException {

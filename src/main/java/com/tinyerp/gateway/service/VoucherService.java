@@ -33,6 +33,7 @@ public class VoucherService {
         // TODO: The data from the ApiVoucher will be passed onto the process
         // TODO: Q: To understand if it makes sense to pass whole object as JSON or pass piece by piece?
         // TODO: Q: The data from the API call will be used as payload of the start event?
+        // TODO: Q: What will be the start event?
         // Just testing activiti
         ProcessInstance processInstance = processRuntime.start(ProcessPayloadBuilder
                 .start()

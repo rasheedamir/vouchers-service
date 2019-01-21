@@ -16,6 +16,8 @@ import java.util.Collection;
 /**
  * This is a link between general spring security and activiti security!
  * It's a mandatory class
+ *
+ * This should be used more generically; and the context should be set properly ...
  */
 @Component
 public class ActivitiSecurityUtil {
@@ -72,6 +74,7 @@ public class ActivitiSecurityUtil {
         }));
 
         // This sets authenticated user id
+        // I believe this is the hooking point
         org.activiti.engine.impl.identity.Authentication.setAuthenticatedUserId(username);
     }
 
