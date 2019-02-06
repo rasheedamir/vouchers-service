@@ -11,6 +11,28 @@ spring:
     throw-exception-if-no-handler-found: true
   resources:
     add-mappings: false
+  cloud:
+    stream:
+      bindings:
+        auditProducer:
+          destination: ${ACT_RB_AUDIT_PRODUCER_DEST:engineEvents}
+          contentType: ${ACT_RB_AUDIT_PRODUCER_CONTENT_TYPE:application/json}
+          producer:
+            required-groups: ${ACT_QUERY_CONSUMER_GROUP:query},${ACT_AUDIT_CONSUMER_GROUP:audit}
+        myCmdResults:
+          destination: ${ACT_RB_COMMAND_RESULTS_DEST:commandResults}
+          group: ${ACT_RB_COMMAND_RESULTS_GROUP:myCmdGroup}
+          contentType: ${ACT_RB_COMMAND_RESULTS_CONTENT_TYPE:application/json}
+        myCmdProducer:
+          destination: ${ACT_RB_COMMAND_RESULTS_DEST:commandConsumer}
+          contentType: ${ACT_RB_COMMAND_RESULTS_CONTENT_TYPE:application/json}
+        signalProducer:
+          destination: ${ACT_RB_SIGNAL_PRODUCER_DEST:signalEvent}
+          contentType: ${ACT_RB_SIGNAL_PRODUCER_CONTENT_TYPE:application/json}
+        signalConsumer:
+          destination: ${ACT_RB_SIGNAL_CONSUMER_DEST:signalEvent}
+          group: ${ACT_RB_SIGNAL_CONSUMER_GROUP:mySignalConsumerGroup}
+          contentType: ${ACT_RB_SIGNAL_CONSUMER_CONTENT_TYPE:application/json}
 
 logging:
   level:
