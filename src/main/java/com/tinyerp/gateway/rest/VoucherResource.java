@@ -1,6 +1,5 @@
 package com.tinyerp.gateway.rest;
 
-import com.tinyerp.gateway.config.security.ActivitiSecurityUtil;
 import com.tinyerp.gateway.json.request.ApiVoucherRequest;
 import com.tinyerp.gateway.json.response.ApiVoucherResponse;
 import com.tinyerp.gateway.service.VoucherService;
