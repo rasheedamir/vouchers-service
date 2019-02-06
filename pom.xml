@@ -26,6 +26,7 @@
 		<activiti-cloud-dependencies.version>7.0.0.RC1</activiti-cloud-dependencies.version>
 		<jhipster-dependencies.version>2.0.26</jhipster-dependencies.version>
 		<logbook.version>1.11.0</logbook.version>
+		<javax.xml.bind.version>2.3.0</javax.xml.bind.version>
 	</properties>
 
 	<!--dependencyManagement>
@@ -41,6 +42,19 @@
 	</dependencyManagement-->
 
 	<dependencies>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>${javax.xml.bind.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime -->
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>2.4.0-b180830.0438</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -60,11 +74,11 @@
 			<version>${activiti-dependencies.version}</version>
 			<exclusions>
 				<exclusion>
-					<groupId>org.activiti</groupId>
+					<groupId>org.activiti.core.common</groupId>
 					<artifactId>activiti-spring-identity</artifactId>
 				</exclusion>
 				<exclusion>
-					<groupId>org.activiti</groupId>
+					<groupId>org.activiti.core.common</groupId>
 					<artifactId>activiti-spring-security</artifactId>
 				</exclusion>
 			</exclusions>
