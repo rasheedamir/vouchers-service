@@ -53,11 +53,35 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 		</dependency>
+
 		<dependency>
-			<groupId>org.activiti.cloud.rb</groupId>
-			<artifactId>activiti-cloud-starter-runtime-bundle</artifactId>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-spring-boot-starter</artifactId>
+			<version>${activiti-dependencies.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.activiti</groupId>
+					<artifactId>activiti-spring-identity</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.activiti</groupId>
+					<artifactId>activiti-spring-security</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.activiti.cloud.common</groupId>
+			<artifactId>activiti-cloud-services-common-security-keycloak</artifactId>
 			<version>${activiti-cloud-dependencies.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.activiti.cloud.common</groupId>
+			<artifactId>activiti-cloud-services-common-identity-keycloak</artifactId>
+			<version>${activiti-cloud-dependencies.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
@@ -150,6 +174,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
 
 </project>
