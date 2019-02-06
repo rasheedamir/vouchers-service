@@ -19,12 +19,12 @@ import java.util.Collection;
  *
  * This should be used more generically; and the context should be set properly ...
  */
-@Component
+// @Component
 public class ActivitiSecurityUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ActivitiSecurityUtil.class);
 
-    //@Autowired
+    // @Autowired
     private UserDetailsService userDetailsService;
 
     public void logInAs(String username) {
