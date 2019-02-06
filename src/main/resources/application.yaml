@@ -1,28 +1,51 @@
 spring:
-  security:
-    user:
-      name: user
-      password: password
-  # To fix this error: The bean 'methodSecurityInterceptor', defined in class path resource [org/activiti/spring/boot/MethodSecurityConfig.class], could not be registered. A bean with that name has already been defined in class path resource [org/springframework/security/config/annotation/method/configuration/GlobalMethodSecurityConfiguration.class] and overriding is disabled.
-  #main:
-  #  allow-bean-definition-overriding: true
+  application:
+    name: tinyerp
+  output:
+    ansi:
+      enabled: always
+  logging:
+    level:
+      org.springframework.security: DEBUG
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+
+logging:
+  level:
+    org:
+      zalando:
+        logbook: TRACE
+
+gateway:
+  keycloak:
+    jwtPublicKey: |
+                    -----BEGIN PUBLIC KEY-----
+                    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiv4c6oSQtvGmP++/xBBek/k+F0mUvwIpiMZ7qyfWHo5RaImoCo7ZMhQfxaY4fFcKX1xiS7Qk3+CaXZTyC4BHq4PAV5hokH5l06TrMtKM85RdFTTT44eEfFPTkl+SFCYCR5HgQ6/NsaZVUcIl8I0mog/k9bVzKgQZtt5XXbBtWrBJCehezPOMxVIRoaSfrN7Qyd/1EaGXc7sij1WnFz9UxS0KaTuS8yvWT3R4W4tkl3clqAg1eKNx96E3jS3b77H/JQhoPbBzzopNOuzik5XXAca3u01boU01zTp7PYuuV6xhMxYL8Pv48li6L7nG1ST2Ry+5vPW5pKXqTn371A1ZBwIDAQAB
+                    -----END PUBLIC KEY-----
+    serverUrl: https://keycloak.carbook-dev.gocarbook.com/auth
+    realm: tinyerp-dev
+    clientId: web-app
 
 keycloak:
-  jwtPublicKey: |
-                  -----BEGIN PUBLIC KEY-----
-                  MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArB4vorj0v
-                  b5GoY8+BHTswIpVTMyxPchj9FOhAzYapEaWK6tK34aa22vwwCOTP8
-                  dF9mcGmdQCaMEa6AsAYhJ5nsNTEIINV0Zaqi2Sm4j8bUwPdJDqLJr
-                  rlrFRHyPOW8peyX8xJUXaJdtPwaFKfmJlINFMlDW9gFbydahM+y32
-                  WBldU2McPxW6RDGFCM/Q6rWufRAXX+97zN3jHZpOGdevJB0XgRlHD
-                  VB2XmNz+z246G6IVLFhmnMxfWh86kfaiDFXbZcb3WTzcL6HrmZs4W
-                  d5c+rseuzu8qW9cfPmF6e6uJGwHRlWNscLmifllVzlp6L2cYh3lom
-                  sg/2fadRRP6dWowIDAQAB
-                  -----END PUBLIC KEY-----
-  audience: web_app
-  serverUrl: https://keycloak.carbook-dev.gocarbook.com/auth
-  realm: carbook
-  clientId: ""
-  clientSecret: ""
-  userName: ""
-  password: ""
+  auth-server-url: ${ACT_KEYCLOAK_URL:https://keycloak.carbook-dev.gocarbook.com/auth}
+  realm: ${ACT_KEYCLOAK_REALM:tinyerp-dev}
+  resource: ${ACT_KEYCLOAK_RESOURCE:activiti}
+  ssl-required: ${ACT_KEYCLOAK_SSL_REQUIRED:none}
+  public-client: ${ACT_KEYCLOAK_CLIENT:true}
+  security-constraints[0]:
+    authRoles[0]: ${ACT_KEYCLOAK_USER_ROLE:ACTIVITI_USER}
+    securityCollections[0]:
+      patterns[0]: ${ACT_KEYCLOAK_PATTERNS:/v1/*}
+  security-constraints[1]:
+    authRoles[0]: ${ACT_KEYCLOAK_ADMIN_ROLE:ACTIVITI_ADMIN}
+    securityCollections[0]:
+      patterns[0]: /admin/*
+  principal-attribute: ${ACT_KEYCLOAK_PRINCIPAL_ATTRIBUTE:preferred-username}
+
+activiti:
+  keycloak:
+    admin-client-app: ${ACT_KEYCLOAK_CLIENT_APP:admin-cli}
+    client-user: ${ACT_KEYCLOAK_CLIENT_USER:client}
+    client-password: ${ACT_KEYCLOAK_CLIENT_PASSWORD:client}

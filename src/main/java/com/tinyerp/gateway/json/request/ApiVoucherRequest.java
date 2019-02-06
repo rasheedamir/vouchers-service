@@ -1,4 +1,4 @@
-package com.tinyerp.gateway.json;
+package com.tinyerp.gateway.json.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -9,15 +9,13 @@ import lombok.Value;
 
 @SuppressWarnings("unused")
 @Value
-@JsonDeserialize(builder = ApiVoucher.Builder.class)
-public final class ApiVoucher {
-    private final Long id;
+@JsonDeserialize(builder = ApiVoucherRequest.Builder.class)
+public final class ApiVoucherRequest {
     private final String description;
 
     @JsonCreator
     @lombok.Builder(builderClassName = "Builder", builderMethodName = "newBuilder", toBuilder = true)
-    private ApiVoucher(@NonNull Long id, String description) {
-        this.id = id;
+    private ApiVoucherRequest(@NonNull String description) {
         this.description = description;
     }
 

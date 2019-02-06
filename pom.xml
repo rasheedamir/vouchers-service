@@ -17,11 +17,15 @@
 	</parent>
 
 	<properties>
+		<java.version>11</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
-		<activiti-dependencies.version>7.0.0.Beta5</activiti-dependencies.version>
+		<activiti-dependencies.version>7.0.0.RC1</activiti-dependencies.version>
+		<activiti-cloud-dependencies.version>7.0.0.RC1</activiti-cloud-dependencies.version>
 		<jhipster-dependencies.version>2.0.26</jhipster-dependencies.version>
+		<logbook.version>1.11.0</logbook.version>
 	</properties>
 
 	<!--dependencyManagement>
@@ -50,9 +54,9 @@
 			<artifactId>spring-security-test</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.activiti</groupId>
-			<artifactId>activiti-spring-boot-starter</artifactId>
-			<version>${activiti-dependencies.version}</version>
+			<groupId>org.activiti.cloud.rb</groupId>
+			<artifactId>activiti-cloud-starter-runtime-bundle</artifactId>
+			<version>${activiti-cloud-dependencies.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -77,6 +81,18 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.zalando</groupId>
+			<artifactId>logbook-spring-boot-starter</artifactId>
+			<version>${logbook.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>3.6.0</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -106,6 +122,12 @@
 			<version>${jhipster-dependencies.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -129,15 +151,5 @@
 		</plugins>
 	</build>
 
-	<repositories>
-		<repository>
-			<id>alfresco</id>
-			<name>Activiti Releases</name>
-			<url>https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-	</repositories>
 
 </project>

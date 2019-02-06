@@ -24,7 +24,7 @@ public class ActivitiSecurityUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ActivitiSecurityUtil.class);
 
-    @Autowired
+    //@Autowired
     private UserDetailsService userDetailsService;
 
     public void logInAs(String username) {

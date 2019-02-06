@@ -1,5 +1,6 @@
 package com.tinyerp.gateway.config.security;
 
+import com.tinyerp.gateway.util.RestPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -38,17 +38,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @EnableResourceServer
 // Commented out becoz it comes with activiti; and should be fixed with: https://github.com/Activiti/Activiti/issues/2387
 //@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
-    @Value("${keycloak.jwtPublicKey}")
+    @Value("${gateway.keycloak.jwtPublicKey}")
     private String jwtPublicKey;
 
-    @Value("${keycloak.audience}")
-    private String audience;
+    @Value("${gateway.keycloak.clientId}")
+    private String clientId;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfiguration.class);
 
@@ -62,7 +62,6 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -78,8 +77,8 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
+            .antMatchers(RestPaths.ACTUATOR_HEALTH, RestPaths.ACTUATOR_INFO).permitAll()
             .antMatchers("/swagger-ui.html").denyAll();
-
     }
 
     /**
@@ -97,7 +96,7 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
          *
          * In case of keycloak; the resourceId should be set to the clientId.
          */
-        config.resourceId(audience);
+        config.resourceId(clientId);
         // This is where you inject your custom error management
         config
             .accessDeniedHandler(accessDeniedHandler())
@@ -173,7 +172,8 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
     // TODO: just added for testing purposes and should be removed later
     // from Salaboy: then add the UserDetailsManager implementation for keycloak
-    @Bean
+    // Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.springframework.security.core.userdetails.UserDetailsService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+    //@Bean
     public UserDetailsService userDetailsService() {
 
         InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
@@ -193,7 +193,6 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
             inMemoryUserDetailsManager.createUser(new User(user[0], passwordEncoder().encode(user[1]),
                     authoritiesStrings.stream().map(s -> new SimpleGrantedAuthority(s)).collect(Collectors.toList())));
         }
-
 
         return inMemoryUserDetailsManager;
     }

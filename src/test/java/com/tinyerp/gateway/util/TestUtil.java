@@ -24,6 +24,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public final class TestUtil {
 
+    public static final String GRANT_TYPE_PASSWORD = "password";
+
+    public static final String USERNAME = "username";
+
+    public static final String PASSWORD = "password";
+
+    public static final String ACCESS_TOKEN = "access_token";
     /**
      * MediaType for JSON UTF8
      */
