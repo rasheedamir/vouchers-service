@@ -12,4 +12,3 @@ Implement a simple voucher approval process with Activiti 7
 - [ ] Link activiti security with spring security more globally
 - [ ] Configure app to use UserDetailsService with KeyCloak
 - [X] Print all filters through which a request passes through - DONE
-- [ ] 
