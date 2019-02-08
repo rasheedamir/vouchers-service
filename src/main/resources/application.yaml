@@ -24,25 +24,3 @@ gateway:
     serverUrl: https://keycloak.carbook-dev.gocarbook.com/auth
     realm: tinyerp-dev
     clientId: web-app
-
-keycloak:
-  auth-server-url: ${ACT_KEYCLOAK_URL:https://keycloak.carbook-dev.gocarbook.com/auth}
-  realm: ${ACT_KEYCLOAK_REALM:tinyerp-dev}
-  resource: ${ACT_KEYCLOAK_RESOURCE:tinyerp-dev}
-  ssl-required: ${ACT_KEYCLOAK_SSL_REQUIRED:none}
-  public-client: ${ACT_KEYCLOAK_CLIENT:true}
-  security-constraints[0]:
-    authRoles[0]: ${ACT_KEYCLOAK_USER_ROLE:ACTIVITI_USER}
-    securityCollections[0]:
-      patterns[0]: ${ACT_KEYCLOAK_PATTERNS:/v1/*}
-  security-constraints[1]:
-    authRoles[0]: ${ACT_KEYCLOAK_ADMIN_ROLE:ACTIVITI_ADMIN}
-    securityCollections[0]:
-      patterns[0]: /admin/*
-  principal-attribute: ${ACT_KEYCLOAK_PRINCIPAL_ATTRIBUTE:preferred-username}
-
-activiti:
-  keycloak:
-    admin-client-app: ${ACT_KEYCLOAK_CLIENT_APP:web-app}
-    client-user: ${ACT_KEYCLOAK_CLIENT_USER:ls-banquet}
-    client-password: ${ACT_KEYCLOAK_CLIENT_PASSWORD:password}

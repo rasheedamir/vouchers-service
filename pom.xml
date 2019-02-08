@@ -22,8 +22,6 @@
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<activiti-dependencies.version>7.0.0.RC1</activiti-dependencies.version>
-		<activiti-cloud-dependencies.version>7.0.0.RC1</activiti-cloud-dependencies.version>
 		<jhipster-dependencies.version>2.0.26</jhipster-dependencies.version>
 		<logbook.version>1.11.0</logbook.version>
 		<javax.xml.bind.version>2.3.0</javax.xml.bind.version>
@@ -54,34 +52,6 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.activiti</groupId>
-			<artifactId>activiti-spring-boot-starter</artifactId>
-			<version>${activiti-dependencies.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.activiti.core.common</groupId>
-					<artifactId>activiti-spring-identity</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.activiti.core.common</groupId>
-					<artifactId>activiti-spring-security</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.activiti.cloud.common</groupId>
-			<artifactId>activiti-cloud-services-common-security-keycloak</artifactId>
-			<version>${activiti-cloud-dependencies.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.activiti.cloud.common</groupId>
-			<artifactId>activiti-cloud-services-common-identity-keycloak</artifactId>
-			<version>${activiti-cloud-dependencies.version}</version>
 		</dependency>
 
 		<dependency>

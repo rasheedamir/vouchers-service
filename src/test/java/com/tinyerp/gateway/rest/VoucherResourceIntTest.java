@@ -12,8 +12,6 @@ import com.tinyerp.gateway.json.response.ApiVoucherResponse;
 import com.tinyerp.gateway.mapper.VoucherMapper;
 import com.tinyerp.gateway.util.RestPaths;
 import com.tinyerp.gateway.util.TestUtil;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,9 +50,6 @@ import static org.junit.Assert.assertThat;
 public class VoucherResourceIntTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VoucherResourceIntTest.class);
-
-    @Autowired
-    private RuntimeService runtimeService;
 
     @Autowired
     private VoucherMapper voucherMapper;
@@ -96,13 +91,6 @@ public class VoucherResourceIntTest {
         final OAuth2Authentication authentication = new OAuth2Authentication(
                 new TokenRequest(null, "client", null, "client_credentials").createOAuth2Request(client), null);
         tokenStore.storeAccessToken(token, authentication);
-    }
-
-    @Before
-    public void cleanUpProcesses() {
-        for (ProcessInstance instance : runtimeService.createProcessInstanceQuery().list()) {
-            runtimeService.deleteProcessInstance(instance.getId(), "Reset Processes");
-        }
     }
 
     @Before
