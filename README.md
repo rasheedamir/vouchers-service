@@ -9,8 +9,8 @@ Implement a simple voucher approval process with Activiti 7
 # todo list
 
 - [ ] Create new realm in keycloak; add users; add roles; add groups; add permissions;
-- [ ] Link activiti security with spring security more globally
-- [X] Configure app to use UserDetailsService with KeyCloak - by right dependencies it's working now
+- [X] Link activiti security with spring security more globally
+- [X] Configure app to use UserDetailsService with KeyCloak - by adding right dependencies it starts working
 - [X] Print all filters through which a request passes through - DONE
 
 # Errors

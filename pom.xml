@@ -29,18 +29,6 @@
 		<javax.xml.bind.version>2.3.0</javax.xml.bind.version>
 	</properties>
 
-	<!--dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.activiti.dependencies</groupId>
-				<artifactId>activiti-dependencies</artifactId>
-				<version>${activiti-dependencies.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-		</dependencies>
-	</dependencyManagement-->
-
 	<dependencies>
 		<dependency>
 			<groupId>javax.xml.bind</groupId>

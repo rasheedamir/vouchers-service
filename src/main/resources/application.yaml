@@ -4,9 +4,6 @@ spring:
   output:
     ansi:
       enabled: always
-  logging:
-    level:
-      org.springframework.security: DEBUG
   mvc:
     throw-exception-if-no-handler-found: true
   resources:
@@ -31,7 +28,7 @@ gateway:
 keycloak:
   auth-server-url: ${ACT_KEYCLOAK_URL:https://keycloak.carbook-dev.gocarbook.com/auth}
   realm: ${ACT_KEYCLOAK_REALM:tinyerp-dev}
-  resource: ${ACT_KEYCLOAK_RESOURCE:activiti}
+  resource: ${ACT_KEYCLOAK_RESOURCE:tinyerp-dev}
   ssl-required: ${ACT_KEYCLOAK_SSL_REQUIRED:none}
   public-client: ${ACT_KEYCLOAK_CLIENT:true}
   security-constraints[0]:
@@ -46,6 +43,6 @@ keycloak:
 
 activiti:
   keycloak:
-    admin-client-app: ${ACT_KEYCLOAK_CLIENT_APP:admin-cli}
-    client-user: ${ACT_KEYCLOAK_CLIENT_USER:client}
-    client-password: ${ACT_KEYCLOAK_CLIENT_PASSWORD:client}
+    admin-client-app: ${ACT_KEYCLOAK_CLIENT_APP:web-app}
+    client-user: ${ACT_KEYCLOAK_CLIENT_USER:ls-banquet}
+    client-password: ${ACT_KEYCLOAK_CLIENT_PASSWORD:password}

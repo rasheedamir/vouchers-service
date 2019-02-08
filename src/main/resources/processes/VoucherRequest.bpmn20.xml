@@ -6,9 +6,9 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:activiti="http://activiti.org/bpmn">
 
-    <process id="vacationRequest" name="Vacation request">
+    <process id="voucherRequest" name="Voucher request">
 
-        <startEvent id="request" activiti:initiator="employeeName">
+        <startEvent id="request" activiti:initiator="secretaryName">
             <extensionElements>
                 <activiti:formProperty id="numberOfDays" name="Number of days" type="long" value="1" required="true"/>
                 <activiti:formProperty id="startDate" name="First day of holiday (dd-MM-yyy)" datePattern="dd-MM-yyyy hh:mm" type="date" required="true" />
@@ -18,7 +18,7 @@
 
         <sequenceFlow id="flow1" sourceRef="request" targetRef="handleRequest" />
 
-        <userTask id="handleRequest" name="Handle vacation request" >
+        <userTask id="handleRequest" name="Handle voucher request - Local Accountant" >
             <documentation>
                 ${employeeName} would like to take ${numberOfDays} day(s) of vacation (Motivation: ${vacationMotivation}).
             </documentation>
@@ -85,3 +85,16 @@
     </process>
 
 </definitions>
+
+<!--
+
+    <userTask id="sid-0D7E3266-5452-4890-8326-E18EA5DD4A96" name="Perform action" activiti:candidateGroups="hr,testgroup">
+      <extensionElements>
+        <modeler:allow-send-email><![CDATA[true]]></modeler:allow-send-email>
+        <modeler:initiator-can-complete><![CDATA[false]]></modeler:initiator-can-complete>
+        <modeler:editor-resource-id><![CDATA[sid-0D7E3266-5452-4890-8326-E18EA5DD4A96]]></modeler:editor-resource-id>
+      </extensionElements>
+    </userTask>
+
+
+-->
