@@ -6,6 +6,8 @@ Automate a manual voucher approval process which includes 8 signatures before pa
 
 Implement a simple voucher approval process with Activiti 7
 
+It's Java 11!
+
 # todo list
 
 - [ ] Create new realm in keycloak; add users; add roles; add groups; add permissions;

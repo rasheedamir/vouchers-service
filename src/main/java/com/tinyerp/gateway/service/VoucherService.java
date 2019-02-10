@@ -1,6 +1,7 @@
 package com.tinyerp.gateway.service;
 
 import com.tinyerp.gateway.domain.Voucher;
+import com.tinyerp.gateway.domain.VoucherId;
 import com.tinyerp.gateway.json.request.ApiVoucherRequest;
 import com.tinyerp.gateway.json.response.ApiVoucherResponse;
 import com.tinyerp.gateway.mapper.VoucherMapper;
@@ -31,8 +32,8 @@ public class VoucherService {
         LOGGER.debug("persisting a voucher");
 
         // TODO: to be generated automatically
-        Long voucherId = 1L;
-        Voucher voucher = voucherRepository.save(voucherMapper.from(apiVoucherRequest, voucherId));
+        VoucherId voucherId = VoucherId.generate();
+        Voucher voucher = voucherRepository.add(voucherMapper.from(apiVoucherRequest, voucherId));
 
         // Just return some hard coded value for now
         return voucherMapper.from(voucher);

@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.tinyerp.gateway.config.security.GatewayKeycloakProperties;
 import com.tinyerp.gateway.domain.Voucher;
+import com.tinyerp.gateway.domain.VoucherDescription;
+import com.tinyerp.gateway.domain.VoucherId;
 import com.tinyerp.gateway.json.request.ApiVoucherRequest;
 import com.tinyerp.gateway.json.response.ApiVoucherResponse;
 import com.tinyerp.gateway.mapper.VoucherMapper;
@@ -74,8 +76,8 @@ public class VoucherResourceIntTest {
      */
     public static Voucher createEntity() {
         return Voucher.newBuilder()
-                .id(1L)
-                .description("First voucher.")
+                .id(VoucherId.generate())
+                .description(new VoucherDescription("Test voucher"))
                 .build();
     }
 

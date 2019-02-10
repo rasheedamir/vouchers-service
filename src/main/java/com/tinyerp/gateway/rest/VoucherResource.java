@@ -46,7 +46,6 @@ public class VoucherResource {
     @Timed
     public ResponseEntity<ApiVoucherResponse> createVoucher(@Valid @RequestBody ApiVoucherRequest apiVoucherRequest,
                                                             @AuthenticationPrincipal Principal principal) throws URISyntaxException {
-        // TODO: this must be handled somewhere else more globally! as this creates the link between spring security and activiti
         LOGGER.debug("REST request to save Voucher : {}", apiVoucherRequest);
         LOGGER.debug("REST request to save Voucher sent By: {}", principal);
         ApiVoucherResponse result = voucherService.save(apiVoucherRequest);

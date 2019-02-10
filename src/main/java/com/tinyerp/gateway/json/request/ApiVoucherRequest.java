@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
+import com.tinyerp.gateway.domain.VoucherDescription;
 import lombok.NonNull;
 import lombok.Value;
 
@@ -11,11 +12,12 @@ import lombok.Value;
 @Value
 @JsonDeserialize(builder = ApiVoucherRequest.Builder.class)
 public final class ApiVoucherRequest {
-    private final String description;
+
+    private final VoucherDescription description;
 
     @JsonCreator
     @lombok.Builder(builderClassName = "Builder", builderMethodName = "newBuilder", toBuilder = true)
-    private ApiVoucherRequest(@NonNull String description) {
+    private ApiVoucherRequest(@NonNull VoucherDescription description) {
         this.description = description;
     }
 

@@ -2,49 +2,33 @@ package com.tinyerp.gateway.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 
-@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = "id")
 @ToString
 @Getter
 @JsonDeserialize(builder = Voucher.Builder.class)
-@Entity
-@Table(name = "voucher")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Voucher implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * Entity unique id
+     * Unique id of the voucher
      */
-    @Id
-    private final Long id;
+    private final VoucherId id;
 
     /**
      * The description of the voucher
      */
-    @Column(name = "description")
-    private final String description;
+    private final VoucherDescription description;
 
     @lombok.Builder(builderClassName = "Builder", builderMethodName = "newBuilder", toBuilder = true)
-    private Voucher(@NonNull Long id, @NonNull String description) {
+    private Voucher(@NonNull final VoucherId id, @NonNull final VoucherDescription description) {
         this.id = id;
         this.description = description;
     }
