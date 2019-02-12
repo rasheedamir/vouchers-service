@@ -10,14 +10,14 @@ import lombok.Value;
 
 @SuppressWarnings("unused")
 @Value
-@JsonDeserialize(builder = ApiVoucherRequest.Builder.class)
-public final class ApiVoucherRequest {
+@JsonDeserialize(builder = ApiClaimVoucher.Builder.class)
+public final class ApiClaimVoucher {
 
     private final VoucherDescription description;
 
     @JsonCreator
     @lombok.Builder(builderClassName = "Builder", builderMethodName = "newBuilder", toBuilder = true)
-    private ApiVoucherRequest(@NonNull VoucherDescription description) {
+    private ApiClaimVoucher(@NonNull VoucherDescription description) {
         this.description = description;
     }
 

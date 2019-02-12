@@ -9,7 +9,8 @@ import com.tinyerp.gateway.config.security.GatewayKeycloakProperties;
 import com.tinyerp.gateway.domain.Voucher;
 import com.tinyerp.gateway.domain.VoucherDescription;
 import com.tinyerp.gateway.domain.VoucherId;
-import com.tinyerp.gateway.json.request.ApiVoucherRequest;
+import com.tinyerp.gateway.domain.VoucherState;
+import com.tinyerp.gateway.json.request.ApiClaimVoucher;
 import com.tinyerp.gateway.json.response.ApiVoucherResponse;
 import com.tinyerp.gateway.mapper.VoucherMapper;
 import com.tinyerp.gateway.util.RestPaths;
@@ -78,6 +79,7 @@ public class VoucherResourceIntTest {
         return Voucher.newBuilder()
                 .id(VoucherId.generate())
                 .description(new VoucherDescription("Test voucher"))
+                .state(VoucherState.CLAIMED)
                 .build();
     }
 
@@ -112,26 +114,43 @@ public class VoucherResourceIntTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         // Create the Voucher
-        ApiVoucherRequest apiVoucherRequest = ApiVoucherRequest.newBuilder().description(voucher.getDescription()).build();
+        ApiClaimVoucher apiClaimVoucher = ApiClaimVoucher.newBuilder().description(voucher.getDescription()).build();
 
         // Given Path Vouchers
         final UriComponentsBuilder uri = UriComponentsBuilder.fromPath(RestPaths.API_VERSION_1_VOUCHER);
 
         // When Posting For Entity
         final ResponseEntity<ApiVoucherResponse> response = restTemplate.exchange(uri.build().toUri(), HttpMethod.POST,
-                new HttpEntity<>(apiVoucherRequest, headers), ApiVoucherResponse.class);
+                new HttpEntity<>(apiClaimVoucher, headers), ApiVoucherResponse.class);
 
-        // Then Status Code Is Ok
+        // Then Status Code Is Created
         assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
 
         // Post the Voucher
         /*this.mockMvc.perform(post(API_VERSION_1_VOUCHER)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .content(TestUtil.convertObjectToJsonBytes(apiVoucherRequest)))
+                .content(TestUtil.convertObjectToJsonBytes(apiClaimVoucher)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andReturn();*/
+    }
+
+    @Test
+    public void givenClaimedVoucherWhenCheckThenCheckedVoucher() throws Exception {
+
+        // Claim a voucher
+        ApiVoucherResponse apiVoucherResponse = claimVoucher();
+
+        // Given Path Vouchers
+        final UriComponentsBuilder uri = UriComponentsBuilder.fromPath(RestPaths.API_VERSION_1_VOUCHER + "/" + apiVoucherResponse.getId() + "/" + "check");
+
+        // When Posting For Entity
+        final ResponseEntity<ApiVoucherResponse> response = restTemplate.exchange(uri.build().toUri(), HttpMethod.POST,
+                new HttpEntity<>(createHeaders()), ApiVoucherResponse.class);
+
+        // Then Status Code Is Ok
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
     }
 
     /**
@@ -162,11 +181,41 @@ public class VoucherResourceIntTest {
         return jsonParser.parseMap(body).get(TestUtil.ACCESS_TOKEN).toString();
     }
 
-
     private void printAccessToken(String accessToken) throws JWTDecodeException {
         DecodedJWT jwt = JWT.decode(accessToken);
         LOGGER.info("JWT Issuer {}", jwt.getIssuer());
         LOGGER.info("JWT Audience {}", jwt.getAudience());
         // Other's can be printed as well! look into jwt.getClaims() which has everything!
+    }
+
+    private ApiVoucherResponse claimVoucher() throws Exception {
+
+        // Create the Voucher
+        ApiClaimVoucher apiClaimVoucher = ApiClaimVoucher.newBuilder().description(voucher.getDescription()).build();
+
+        // Given Path Vouchers
+        final UriComponentsBuilder uri = UriComponentsBuilder.fromPath(RestPaths.API_VERSION_1_VOUCHER);
+
+        // When Posting For Entity
+        final ResponseEntity<ApiVoucherResponse> response = restTemplate.exchange(uri.build().toUri(), HttpMethod.POST,
+                new HttpEntity<>(apiClaimVoucher, createHeaders()), ApiVoucherResponse.class);
+
+        // Then Status Code Is Created
+        assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
+
+        return response.getBody();
+    }
+
+    private HttpHeaders createHeaders() throws Exception {
+
+        // Get access token for local secretary for banquet (ziafat)
+        String token = obtainAccessToken("ls-banquet", "password");
+
+        // Define the mandatory headers
+        final HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        return headers;
     }
 }

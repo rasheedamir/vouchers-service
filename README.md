@@ -1,10 +1,10 @@
 # Problem
 
-Automate a manual voucher approval process which includes 8 signatures before payment can be released.
+Automate a manual claimedVoucher approval process which includes 8 signatures before payment can be released.
 
 # Solution
 
-Implement a simple voucher approval process with Activiti 7
+Implement a simple claimedVoucher approval process with Activiti 7
 
 It's Java 11!
 
@@ -14,6 +14,15 @@ It's Java 11!
 - [X] Link activiti security with spring security more globally
 - [X] Configure app to use UserDetailsService with KeyCloak - by adding right dependencies it starts working
 - [X] Print all filters through which a request passes through - DONE
+- [ ] Auditing
+- [ ] Revisions
+- [ ] State Machine
+- [ ] Criteria & Query
+- [ ] Hateoas
+- [X] jooq
+- [ ] Logging params just generically
+- [ ] Principal is again NULL!
+- [ ] Immutable, DDD & State Machine?
 
 # Errors
 

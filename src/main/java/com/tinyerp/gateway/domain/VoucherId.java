@@ -1,5 +1,7 @@
 package com.tinyerp.gateway.domain;
 
+import com.tinyerp.gateway.common.SimpleWrapper;
+
 import java.util.UUID;
 
 public final class VoucherId extends SimpleWrapper<UUID> {

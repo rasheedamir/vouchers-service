@@ -27,13 +27,20 @@ public class Voucher implements Serializable {
      */
     private final VoucherDescription description;
 
+    private final VoucherState state;
+
+    // Add 1-to-M voucher transitions or maybe it's isn't needed?
+
     @lombok.Builder(builderClassName = "Builder", builderMethodName = "newBuilder", toBuilder = true)
-    private Voucher(@NonNull final VoucherId id, @NonNull final VoucherDescription description) {
+    private Voucher(@NonNull final VoucherId id, @NonNull final VoucherDescription description,
+                    @NonNull final VoucherState state) {
         this.id = id;
         this.description = description;
+        this.state = state;
     }
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class Builder {
     }
+
 }

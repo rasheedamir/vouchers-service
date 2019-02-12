@@ -2,6 +2,7 @@ package com.tinyerp.gateway.repository;
 
 import com.tinyerp.gateway.domain.Voucher;
 import com.tinyerp.gateway.domain.VoucherId;
+import com.tinyerp.gateway.domain.VoucherState;
 import com.tinyerp.gateway.exception.VoucherNotFoundException;
 import org.jooq.DSLContext;
 import org.slf4j.Logger;
@@ -27,10 +28,11 @@ public class VoucherRepositoryImpl implements VoucherRepository {
 
     @Override
     public Voucher add(Voucher voucherEntry) {
-        LOGGER.info("Adding new voucher entry with information: {}", voucherEntry);
+        LOGGER.info("Creating voucher : {}", voucherEntry);
         jooq.insertInto(Tables.VOUCHER)
                 .set(Columns.VOUCHER_ID, voucherEntry.getId())
                 .set(Columns.VOUCHER_DESCRIPTION, voucherEntry.getDescription())
+                .set(Columns.VOUCHER_STATE, voucherEntry.getState())
                 .execute();
         // Seems redundant! Can't we just return the one we received
         return findById(voucherEntry.getId());
@@ -63,6 +65,17 @@ public class VoucherRepositoryImpl implements VoucherRepository {
 
     @Override
     public Voucher update(Voucher voucherEntry) {
+        LOGGER.info("Updating voucher : {}", voucherEntry);
+        jooq.update(Tables.VOUCHER)
+                .set(Columns.VOUCHER_DESCRIPTION, voucherEntry.getDescription())
+                .set(Columns.VOUCHER_STATE, voucherEntry.getState())
+                .where(Columns.VOUCHER_ID.eq(voucherEntry.getId()))
+                .execute();
+        return findById(voucherEntry.getId());
+    }
+
+    @Override
+    public Page<Voucher> findByCurrentState(VoucherState state, Pageable pageable) {
         return null;
     }
 }

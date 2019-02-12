@@ -2,6 +2,7 @@ package com.tinyerp.gateway.repository;
 
 import com.tinyerp.gateway.domain.Voucher;
 import com.tinyerp.gateway.domain.VoucherId;
+import com.tinyerp.gateway.domain.VoucherState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -37,6 +38,8 @@ public interface VoucherRepository {
      * @throws com.tinyerp.gateway.exception.VoucherNotFoundException If voucher entry is not found.
      */
     Voucher findById(VoucherId id);
+
+    Page<Voucher> findByCurrentState(VoucherState state, Pageable pageable);
 
     /**
      * Finds voucher

@@ -1,4 +1,4 @@
-package com.tinyerp.gateway.domain;
+package com.tinyerp.gateway.common;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
