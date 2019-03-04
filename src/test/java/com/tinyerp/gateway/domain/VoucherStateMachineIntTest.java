@@ -21,6 +21,6 @@ public class VoucherStateMachineIntTest {
         StateMachine<VoucherState, VoucherEvent> stateMachine = stateMachineFactory.getStateMachine();;
         stateMachine.start();
 
-        stateMachine.sendEvent(VoucherEvent.check);
+        stateMachine.sendEvent(VoucherEvent.CHECK);
     }
 }

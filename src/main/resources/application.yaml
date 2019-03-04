@@ -1,6 +1,8 @@
 spring:
   application:
     name: tinyerp
+    # TODO: should be injected dynamically based on tag
+    version: 0.0.1
   output:
     ansi:
       enabled: always
@@ -12,8 +14,13 @@ spring:
 logging:
   level:
     org:
+      springframework:
+        web: DEBUG
       zalando:
         logbook: TRACE
+    com:
+      tinyerp:
+        gateway: TRACE
 
 gateway:
   keycloak:
@@ -24,3 +31,18 @@ gateway:
     serverUrl: https://keycloak.carbook-dev.gocarbook.com/auth
     realm: tinyerp-dev
     clientId: web-app
+
+tinyerp:
+  service:
+    client:
+      secret: kk61c08f-50ba-4146-90de-9a8255ed5077 # not correct value
+      clientId: api
+      accessTokenUri: https://keycloak.carbook-dev.gocarbook.com/auth/realms/tinyerp-dev/protocol/openid-connect/token
+
+  voucher:
+    endPoint: http://localhost:8080/api/v1
+
+swagger:
+  auth:
+    client-id: swagger-ui
+    token-url: https://keycloak.carbook-dev.gocarbook.com/auth/realms/tinyerp-dev/protocol/openid-connect/token

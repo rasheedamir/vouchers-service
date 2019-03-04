@@ -143,7 +143,7 @@ public class VoucherResourceIntTest {
         ApiVoucherResponse apiVoucherResponse = claimVoucher();
 
         // Given Path Vouchers
-        final UriComponentsBuilder uri = UriComponentsBuilder.fromPath(RestPaths.API_VERSION_1_VOUCHER + "/" + apiVoucherResponse.getId() + "/" + "check");
+        final UriComponentsBuilder uri = UriComponentsBuilder.fromPath(RestPaths.API_VERSION_1_VOUCHER + "/" + apiVoucherResponse.getId() + "/" + "CHECK");
 
         // When Posting For Entity
         final ResponseEntity<ApiVoucherResponse> response = restTemplate.exchange(uri.build().toUri(), HttpMethod.POST,
@@ -210,6 +210,7 @@ public class VoucherResourceIntTest {
 
         // Get access token for local secretary for banquet (ziafat)
         String token = obtainAccessToken("ls-banquet", "password");
+        LOGGER.info("{}", token);
 
         // Define the mandatory headers
         final HttpHeaders headers = new HttpHeaders();

@@ -2,6 +2,7 @@ package com.tinyerp.gateway.config.security;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.Value;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.Collection;
  *
  */
 
+@Value
 @JsonPropertyOrder({
         ApiError.TYPE,
         ApiError.TITLE,

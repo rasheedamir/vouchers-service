@@ -14,12 +14,16 @@ public final class RestPaths {
     public final static String API_VERSION_1 = API + VERSION_1;
 
     public final static String VOUCHER = "/voucher";
-    public final static String VOUCHER_EVENT = VOUCHER + "/{id}/{event}";
+    public final static String VOUCHER_ID = "voucherId";
+    public final static String VOUCHER_EVENT = "voucherEvent";
+    public final static String VOUCHER_ID_EVENT = VOUCHER + "/{" + VOUCHER_ID + "}/{"+ VOUCHER_EVENT + "}";
     public final static String API_VERSION_1_VOUCHER = API_VERSION_1 + VOUCHER;
     public final static String API_VERSION_1_VOUCHER_EVENT = API_VERSION_1 + VOUCHER_EVENT;
 
     public final static String ACTUATOR_HEALTH = "/actuator/health";
     public final static String ACTUATOR_INFO = "/actuator/info";
+
+    public final static String SWAGGER_UI = "/swagger-ui.html";
 
     // PRIVATE //
 

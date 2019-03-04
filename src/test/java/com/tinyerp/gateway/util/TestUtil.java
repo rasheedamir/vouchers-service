@@ -94,7 +94,7 @@ public final class TestUtil {
         assertThat(domainObject1).isNotEqualTo(null);
         // Test with an instance of the same class
         T domainObject2 = clazz.getConstructor().newInstance();
-        //TODO: Verify if this check is need, happening becuase existing equals method was replaced with lombok
+        //TODO: Verify if this CHECK is need, happening becuase existing equals method was replaced with lombok
         //assertThat(domainObject1).isNotEqualTo(domainObject2);
         // HashCodes are equals because the objects are not persisted yet
         assertThat(domainObject1.hashCode()).isEqualTo(domainObject2.hashCode());

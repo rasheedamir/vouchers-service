@@ -1,7 +1,12 @@
 package com.tinyerp.gateway.domain;
 
+import com.tinyerp.gateway.domain.voucher.action.check.CheckDoAction;
+import com.tinyerp.gateway.domain.voucher.action.check.CheckEntryAction;
+import com.tinyerp.gateway.domain.voucher.action.check.CheckExitAction;
+import com.tinyerp.gateway.domain.voucher.action.ClaimToCheckTransitionAction;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.statemachine.ExtendedState;
@@ -36,19 +41,21 @@ public class VoucherStateMachineConfiguration extends EnumStateMachineConfigurer
         states
                 .withStates()
                 .initial(VoucherState.CLAIMED, context -> setUnpaid(context.getExtendedState()))
+                .stateDo(VoucherState.CHECKED, checkDoAction())
+                .state(VoucherState.CHECKED, checkEntryAction(), checkExitAction())
                 .end(VoucherState.PAID)
                 .states(EnumSet.allOf(VoucherState.class));
     }
 
-    public StateMachineListener<VoucherState, VoucherEvent> loggingListener() {
-        return new StateMachineListenerAdapter<>() {
+    private StateMachineListener<VoucherState, VoucherEvent> loggingListener() {
+        return new StateMachineListenerAdapter<VoucherState, VoucherEvent>() {
             @Override
             public void stateChanged(State<VoucherState, VoucherEvent> from, State<VoucherState, VoucherEvent> to) {
-                log.info("State changed to {}", to.getId());
+                log.debug("State changed to {}", to.getId());
             }
             @Override
             public void eventNotAccepted(Message<VoucherEvent> event) {
-                log.error("Event not accepted: {}", event.getPayload());
+                log.debug("Event not accepted: {}", event.getPayload());
             }
         };
     }
@@ -63,8 +70,8 @@ public class VoucherStateMachineConfiguration extends EnumStateMachineConfigurer
                 // (1)
                 .source(VoucherState.CLAIMED)
                 .target(VoucherState.CHECKED)
-                .event(VoucherEvent.check)
-                .action(checkVoucher())
+                .event(VoucherEvent.CHECK)
+                .action(claimToCheckTransitionAction())
 /**
                 .and()
                 // (2)
@@ -157,5 +164,25 @@ public class VoucherStateMachineConfiguration extends EnumStateMachineConfigurer
 
     public Action<VoucherState, VoucherEvent> checkVoucher() {
         return context -> setPaid(context.getExtendedState());
+    }
+
+    @Bean
+    public CheckEntryAction checkEntryAction() {
+        return new CheckEntryAction();
+    }
+
+    @Bean
+    public CheckExitAction checkExitAction() {
+        return new CheckExitAction();
+    }
+
+    @Bean
+    public CheckDoAction checkDoAction() {
+        return new CheckDoAction();
+    }
+
+    @Bean
+    public ClaimToCheckTransitionAction claimToCheckTransitionAction() {
+        return new ClaimToCheckTransitionAction();
     }
 }

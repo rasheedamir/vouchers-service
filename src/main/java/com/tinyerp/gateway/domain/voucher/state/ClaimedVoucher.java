@@ -1,4 +1,4 @@
-package com.tinyerp.gateway.domain.voucher;
+package com.tinyerp.gateway.domain.voucher.state;
 
 import com.tinyerp.gateway.domain.VoucherDescription;
 import com.tinyerp.gateway.domain.VoucherId;

@@ -42,5 +42,4 @@ public class Voucher implements Serializable {
     @JsonPOJOBuilder(withPrefix = "")
     public static class Builder {
     }
-
 }

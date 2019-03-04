@@ -3,21 +3,16 @@ package com.tinyerp.gateway.config.security;
 import com.tinyerp.gateway.util.RestPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
@@ -29,19 +24,15 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Configuration
+// EnableWebSecurity will provide configuration via HttpSecurity providing the configuration you could find with <http></http> tag in xml configuration, it's allow you to configure your access based on urls patterns, the authentication endpoints, handlers etc...
 @EnableWebSecurity(debug = true)
 @EnableResourceServer
-// Commented out becoz it comes with activiti; and should be fixed with: https://github.com/Activiti/Activiti/issues/2387
-//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+// EnableGlobalMethodSecurity provides AOP security on methods, some of annotation it will enable are PreAuthorize, PostAuthorize also it has support for JSR-250.
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
     @Value("${gateway.keycloak.jwtPublicKey}")
@@ -58,27 +49,23 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
         this.customAccessTokenConverter = customAccessTokenConverter;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf()
-            .disable()
-            .headers().frameOptions().sameOrigin()
-            .and()
+                .disable()
+                .headers().frameOptions().sameOrigin()
+                .and()
             .headers()
-            .frameOptions()
-            .disable()
-            .and()
+                .frameOptions()
+                .disable()
+                .and()
             .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
             .authorizeRequests()
-            .antMatchers(RestPaths.ACTUATOR_HEALTH, RestPaths.ACTUATOR_INFO).permitAll()
-            .antMatchers("/swagger-ui.html").denyAll();
+                .antMatchers(RestPaths.ACTUATOR_HEALTH, RestPaths.ACTUATOR_INFO).permitAll()
+                .antMatchers(RestPaths.SWAGGER_UI).denyAll()
+                .anyRequest().fullyAuthenticated(); // this line is mandatory!
     }
 
     /**
@@ -168,32 +155,5 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
     @Bean
     public WebResponseExceptionTranslator<?> exceptionTranslator() {
         return new ApiErrorWebResponseExceptionTranslator();
-    }
-
-    // TODO: just added for testing purposes and should be removed later
-    // from Salaboy: then add the UserDetailsManager implementation for keycloak
-    // Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.springframework.security.core.userdetails.UserDetailsService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
-    //@Bean
-    public UserDetailsService userDetailsService() {
-
-        InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
-
-        String[][] usersGroupsAndRoles = {
-                {"salaboy", "password", "ROLE_ACTIVITI_USER", "GROUP_activitiTeam"},
-                {"ryandawsonuk", "password", "ROLE_ACTIVITI_USER", "GROUP_activitiTeam"},
-                {"erdemedeiros", "password", "ROLE_ACTIVITI_USER", "GROUP_activitiTeam"},
-                {"other", "password", "ROLE_ACTIVITI_USER", "GROUP_otherTeam"},
-                {"system", "password", "ROLE_ACTIVITI_USER"},
-                {"admin", "password", "ROLE_ACTIVITI_ADMIN"},
-        };
-
-        for (String[] user : usersGroupsAndRoles) {
-            List<String> authoritiesStrings = Arrays.asList(Arrays.copyOfRange(user, 2, user.length));
-            LOGGER.info("> Registering new user: " + user[0] + " with the following Authorities[" + authoritiesStrings + "]");
-            inMemoryUserDetailsManager.createUser(new User(user[0], passwordEncoder().encode(user[1]),
-                    authoritiesStrings.stream().map(s -> new SimpleGrantedAuthority(s)).collect(Collectors.toList())));
-        }
-
-        return inMemoryUserDetailsManager;
     }
 }

@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -62,6 +63,7 @@ public class VoucherService {
                 .setHeader(VOUCHER_ID_HEADER, id.toString())
                 .build();
 
+        // TODO: handle case when event is accepted but for some reason transition fails as then we should return 500
         sm.sendEvent(message);
 
         return voucherMapper.from(voucherRepository.findById(id));
@@ -76,7 +78,7 @@ public class VoucherService {
 
         sm.getStateMachineAccessor()
                 .doWithAllRegions(sma -> {
-                    sma.addStateMachineInterceptor(new StateMachineInterceptorAdapter<>() {
+                    sma.addStateMachineInterceptor(new StateMachineInterceptorAdapter<VoucherState, VoucherEvent>() {
                         @Override
                         public void preStateChange(State<VoucherState, VoucherEvent> state, Message<VoucherEvent> message, Transition<VoucherState, VoucherEvent> transition, StateMachine<VoucherState, VoucherEvent> stateMachine) {
                             Optional.ofNullable(message).ifPresent(msg -> {
@@ -92,7 +94,6 @@ public class VoucherService {
                                             voucherRepository.update(updatedVoucher);
                                         });
                             });
-
                         }
                     });
                     sma.resetStateMachine(new DefaultStateMachineContext<>(voucher.getState(), null, null, null));
