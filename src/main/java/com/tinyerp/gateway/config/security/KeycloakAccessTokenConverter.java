@@ -7,14 +7,15 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-public class CustomAccessTokenConverter extends DefaultAccessTokenConverter {
+public class KeycloakAccessTokenConverter extends DefaultAccessTokenConverter {
 
     @Override
     public OAuth2Authentication extractAuthentication(Map<String, ?> claims) {
         OAuth2Authentication authentication = super.extractAuthentication(claims);
+        KeycloakAuthentication keycloakAuthentication = new KeycloakAuthentication(authentication.getOAuth2Request(), authentication.getUserAuthentication(), claims);
         // all claims are stored; and later can be extracted as per needs
-        authentication.setDetails(claims);
-        return authentication;
+        keycloakAuthentication.setDetails(claims);
+        return keycloakAuthentication;
     }
 
 }

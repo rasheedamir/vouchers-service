@@ -1,5 +1,6 @@
 package com.tinyerp.gateway.rest;
 
+import com.tinyerp.gateway.domain.CurrentUser;
 import com.tinyerp.gateway.domain.VoucherEvent;
 import com.tinyerp.gateway.domain.VoucherId;
 import com.tinyerp.gateway.json.request.ApiClaimVoucher;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +38,6 @@ public class VoucherResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(VoucherResource.class);
 
     private final VoucherService voucherService;
-    private final IAuthenticationFacade authenticationFacade;
 
     private final String ENTITY_NAME = "voucher";
 
@@ -46,9 +45,9 @@ public class VoucherResource {
     @Timed
     // TODO: The @AuthenticationPrincipal should be filled in by Spring Security using AuthenticationPrincipalArgumentResolver.
     public ResponseEntity<ApiVoucherResponse> claimVoucher(@Valid @RequestBody ApiClaimVoucher apiClaimVoucher,
-                                                           @AuthenticationPrincipal Authentication authentication) throws URISyntaxException {
+                                                           @AuthenticationPrincipal CurrentUser currentUser) throws URISyntaxException {
         LOGGER.debug("REST request to claim Voucher : {}", apiClaimVoucher);
-        LOGGER.debug("REST request to claim Voucher sent By: {}", authenticationFacade.getUser());
+        LOGGER.debug("REST request to claim Voucher sent By: {}", currentUser);
         ApiVoucherResponse result = voucherService.claim(apiClaimVoucher);
 
         LOGGER.debug("REST response for claim Voucher : {}", result);

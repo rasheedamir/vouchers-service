@@ -43,10 +43,10 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfiguration.class);
 
-    private final CustomAccessTokenConverter customAccessTokenConverter;
+    private final KeycloakAccessTokenConverter keycloakAccessTokenConverter;
 
-    public SecurityConfiguration(CustomAccessTokenConverter customAccessTokenConverter) {
-        this.customAccessTokenConverter = customAccessTokenConverter;
+    public SecurityConfiguration(KeycloakAccessTokenConverter keycloakAccessTokenConverter) {
+        this.keycloakAccessTokenConverter = keycloakAccessTokenConverter;
     }
 
     @Override
@@ -94,7 +94,7 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         converter.setVerifierKey(jwtPublicKey);
-        converter.setAccessTokenConverter(customAccessTokenConverter);
+        converter.setAccessTokenConverter(keycloakAccessTokenConverter);
         return converter;
     }
 

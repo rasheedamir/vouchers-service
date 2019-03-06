@@ -5,7 +5,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.tinyerp.gateway.util.CollectionsUtil;
 import lombok.Value;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents an authenticated user returned from Keycloak
@@ -39,7 +41,20 @@ public final class CurrentUser {
         city = jwt.getClaim(CLAIM_CITY).asString();
     }
 
+    private CurrentUser(Map<String, ?> claims) {
+        id = (String) claims.get(CLAIM_ID);
+        username = (String) claims.get(CLAIM_USERNAME);
+        fullName = (String) claims.get(CLAIM_FULL_NAME);
+        email = (String) claims.get(CLAIM_EMAIL);
+        departments = CollectionsUtil.asSafeList((ArrayList)claims.get(CLAIM_DEPARTMENTS));
+        city = (String) claims.get(CLAIM_CITY);
+    }
+
     public static CurrentUser from(String accessToken) {
         return new CurrentUser(accessToken);
+    }
+
+    public static CurrentUser from(Map<String, ?> claims) {
+        return new CurrentUser(claims);
     }
 }
